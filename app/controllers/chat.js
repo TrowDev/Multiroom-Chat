@@ -12,5 +12,7 @@ module.exports.iniciarChat = (app,req,res) => {
         return;
     }
 
-    res.render("chat");
+    app.get('io').emit('notificaUsuarios',{apelido: dadosForm.apelido,mensagem:' acabou de entrar no chat.'});
+
+    res.render("chat",{apelido:dadosForm.apelido});
 }
