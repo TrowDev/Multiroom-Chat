@@ -81,24 +81,9 @@
 			
 			<div class="row participantes" id="participantes" style="display:none">
 				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Jorge
-					</span>
-					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						José
-					</span>
-					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Fernando
-					</span>
+				<div class="col-md-10" id="participantes">
 				</div>
 				<div class="col-md-1"></div>
-                
             </div>
         </div>
 		
@@ -110,6 +95,7 @@
 							<div class="input-group">
 								<input type="text" class="form-control" id="msg" placeholder="Mensagem">
 								<input type="hidden" id="apelido" value="<%= apelido %>">
+								<input type="hidden" id="apelido_atualizado" value="0">
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button" id="enviar">></button>
 								</span>
@@ -126,7 +112,12 @@
 			var socket = io('http://localhost');
 
 			$('#enviar').click(()=>{
-				socket.emit('disparaServidor',{apelido:$('#apelido').val(),mensagem: $('#msg').val() });
+				socket.emit('disparaServidor',{
+					apelido:$('#apelido').val(),
+					mensagem: $('#msg').val(),
+					apelido_atualizado: $("#apelido_atualizado").val() 
+				});
+				$("#apelido_atualizado").val(1);
 				$("#msg").val('');
 			});
 
@@ -138,6 +129,14 @@
 							'<p>'+data.mensagem+'</p>' +
 						'</div>';
 				$("#dialogos").append(html);
+				window.scrollTo(0,document.body.scrollHeight);
+			});
+
+			socket.on('updateMembros', (data)=>{
+
+				var html = '';
+				html += '<span class="participante"><img src="images/ico_usuario.png">' + data.apelido + '</span>';
+				$("#participantes").append(html);
 			});
 		</script>
 	</body>

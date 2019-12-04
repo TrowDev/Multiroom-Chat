@@ -19,10 +19,12 @@ io.on('connection',(socket)=>{
 
     socket.on('disparaServidor', (data)=>{
         socket.emit('notificaUsuarios',data);
-    });
-
-    socket.on('disparaServidor', (data)=>{
-        socket.broadcast.emit('notificaUsuarios',{});
+        socket.broadcast.emit('notificaUsuarios',data);
+        
+        if(parseInt(data.apelido_atualizado)==0){
+            socket.emit('updateMembros',data);
+            socket.broadcast.emit('updateMembros',data);
+        }
     });
 
 });
